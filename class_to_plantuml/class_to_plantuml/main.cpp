@@ -1,5 +1,3 @@
-///コミットテスト09241840
-
 #include <stdio.h>
 #include <iostream>
 //文字検索
@@ -14,7 +12,7 @@
 using namespace std;
 
 //
-int class_find(string& strData,FunctioList& inheritData) {
+int class_find(string& strData,FunctionList& inheritData) {
 	int iFindResult;
 	int iModifier_size = sizeof(modifier_list_string_not_colon) / sizeof(string);
 	std::smatch results; //正規表現でヒットした結果を代入
@@ -94,43 +92,71 @@ int class_end(string& strData,bool &classFlag) {
 	return iFindResult;
 }
 
+char cFireOpen(fstream &fileDate,string &FileName) {
+	cout << "絶対パスでファイル名を入力してください\n";
+	cin >> FileName;
+	fileDate.open(FileName, ios::in);
+	if (!fileDate) {
+		std::cerr << "ファイルを開けませんでした。" << std::endl;
+		exit(1);
+		return -1;
+	}
+	return 1;
+}
+
+char cOutPutFire(fstream &fileDate, string &FileName) {
+	cout << "作成するファイル名を入力してください\n";
+	cin >> FileName;
+	fileDate.open(FileName, ios::in);
+	if (!fileDate) {
+		std::cerr << "ファイルを開けませんでした。" << std::endl;
+		exit(1);
+		return -1;
+	}
+	return 1;
+}
 
 int main()
 {
-
-
+	string strReadFileName;				//読み込むファイル名
+	string strOutPutFileName;			//作成するファイル名
 	fstream myFile;
-	myFile.open("C:/Users/sou/Source/Repos/list2_2/list2_2/main_test.cpp", ios::in);//read
+
+	cFireOpen(myFile,strReadFileName);
 	//printf("%s\n",type_list_string[0].c_str());
-	int cout = -1;
+	int iCount = -1;							//classを発見したカウント数
 	Class_list ClassllistData[10];	//クラスリストを管理
 	bool bClassFlag = false;			//クラスの終了を管理
-	FunctioList strFunctionData;	//取得した関数データを一時保存
-	FunctioList strInheritData;		//継承するファイル名
-	class_PlantUML UmlFile("C:/Users/sou/Source/Repos/list2_2/list2_2/PlantUML_test.txt");
+	FunctionList strFunctionData;	//取得した関数データを一時保存
+	FunctionList strInheritData;		//継承するファイル名
+
+	cout<<"作成するファイル名を入力してください"<<endl;
+	cin >> strOutPutFileName;
+	class_PlantUML UmlFile(strOutPutFileName);
 
 	if (myFile.is_open()) {
 		string line;
 		while (getline(myFile, line)) {
 			if (-1 != class_find(line, strFunctionData)) {
-				cout++;
+				iCount++;
 				bClassFlag = true;
-				ClassllistData[cout].cClassNameRegist(line);
-				ClassllistData[cout].strInheritRegist(strFunctionData.cModifier,strFunctionData.strFunctionName);
+				ClassllistData[iCount].cClassNameRegist(line);
+				ClassllistData[iCount].strInheritRegist(strFunctionData.cModifier,strFunctionData.strFunctionName);
 			}
 			class_end(line,bClassFlag);
 
-			if ( (-1 != type_sort(line, ClassllistData[cout].cModifier) ) && (bClassFlag==true)) {
-				ClassllistData[cout].cFuncionRegist(ClassllistData[cout].cModifier,line);
+			if ( (-1 != type_sort(line, ClassllistData[iCount].cModifier) ) && (bClassFlag==true)) {
+				ClassllistData[iCount].cFuncionRegist(ClassllistData[iCount].cModifier,line);
 			}
 		}
 
 		printf("\n\n---全て表示---\n");
-		for (int c = 0; c <= cout;c++) {	
+		for (int c = 0; c <= iCount;c++) {
 			ClassllistData[c].vShowAll();
 			UmlFile.ClassWriteToFile(ClassllistData[c].strPutClassName());
 			UmlFile.FunctionWriteToFile(ClassllistData[c].strPutFunctionPut());
 			UmlFile.ClassEndWriteToFile();
+			UmlFile.strInheritWriteToFile(ClassllistData[c].strPutClassName(), ClassllistData[c].strPutInherit());
 		}
 		UmlFile.endfile();
 		myFile.close();

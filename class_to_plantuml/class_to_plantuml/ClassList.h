@@ -7,18 +7,18 @@ using namespace std;
 #define PROTECTED		3
 #define NONMODIFIER	0
 
-typedef struct FunctioList {
+typedef struct FunctionList {
 	char cModifier = -1;
 	std::string strFunctionName = "";
-	FunctioList *PvNextName=NULL;
-}FunctioList;
+	FunctionList *PvNextName=NULL;
+}FunctionList;
 
 class  Class_list {
 private:
-	FunctioList strInherit;//継承元
+	FunctionList strInherit;//継承元
 	std::string strClassName= "";	//クラス名
-	FunctioList strFunctionList;
-	FunctioList* const PstrFunctionList=&strFunctionList;	//関数/変数名のリスト。動的に確保される
+	FunctionList strFunctionList;
+	FunctionList* const PstrFunctionList=&strFunctionList;	//関数/変数名のリスト。動的に確保される
 	int iLintCount=-1;			//関数/変数名のカウント数
 	char cModifierCheck(char cData);
 

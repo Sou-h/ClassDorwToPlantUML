@@ -13,41 +13,41 @@ string Class_list::strPutClassName() {
 	else {
 		printf("登録されているデータがありません\n");
 	}
-	return NULL;
+	return "";
 }
 
 string Class_list::strPutFunctionPut() {
 	if (-1 != iLintCount) {
-		FunctioList *PstrFunctionData = PstrFunctionList;
+		FunctionList *PstrFunctionData = PstrFunctionList;
 		string strFunctionData="";
 		do
 		{
 			strFunctionData+= PstrFunctionData->cModifier;
 			strFunctionData += PstrFunctionData->strFunctionName;
 			strFunctionData += "\n";
-			PstrFunctionData = reinterpret_cast <FunctioList *>(PstrFunctionData->PvNextName);
+			PstrFunctionData = reinterpret_cast <FunctionList *>(PstrFunctionData->PvNextName);
 		} while ((NULL != PstrFunctionData));
 		return strFunctionData;
 	}
 	else {
 		printf("登録されているデータがありません\n");
 	}
-	return NULL;
+	return "";
 }
 
 string Class_list::strPutInherit() {
-	if ("" == strInherit.strFunctionName) {
+	if ("" != strInherit.strFunctionName) {
 		return strInherit.strFunctionName;
 	}
 	else {
 		printf("登録されているデータがありません\n");
 	}
-	return NULL;
+	return "";
 }
 
 void Class_list::vShowAll() {
 	if (-1!=iLintCount) {
-		FunctioList *PstrFunctionData = PstrFunctionList;
+		FunctionList *PstrFunctionData = PstrFunctionList;
 		cout<<strClassName<<endl;
 		if ("" != strInherit.strFunctionName) {
 			printf("アクセス修飾子:%d\t",strInherit.cModifier);
@@ -57,7 +57,7 @@ void Class_list::vShowAll() {
 		{
 			printf("アクセス修飾子:%d\t", PstrFunctionData->cModifier);
 			cout<<"関数名:"<< PstrFunctionData->strFunctionName<<endl;
-			PstrFunctionData = reinterpret_cast <FunctioList *>(PstrFunctionData->PvNextName);
+			PstrFunctionData = reinterpret_cast <FunctionList *>(PstrFunctionData->PvNextName);
 		} while ((NULL != PstrFunctionData));
 		printf("-----------------\n\n");
 	}
@@ -96,8 +96,8 @@ char Class_list::cFuncionRegist(char cModifierData,string strFunctionNameData) {
 		return 0;
 	}
 
-	FunctioList **PstrNextFunctionList= &PstrFunctionList->PvNextName;
-	FunctioList *strNextFunctionList = new FunctioList;
+	FunctionList **PstrNextFunctionList= &PstrFunctionList->PvNextName;
+	FunctionList *strNextFunctionList = new FunctionList;
 	strNextFunctionList->cModifier= cModifierCheck(cModifierData);
 	strNextFunctionList->strFunctionName = strFunctionNameData;
 	strNextFunctionList->PvNextName = NULL;

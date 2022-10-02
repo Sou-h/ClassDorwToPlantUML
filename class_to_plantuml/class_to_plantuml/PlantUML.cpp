@@ -57,7 +57,7 @@ char class_PlantUML::strInheritWriteToFile(string ClassName, string strInheritNa
 		writefile((strInheritName+"<|--"+ClassName+"\n"));
 	}
 	else {
-		printf("“n‚³‚ê‚½•¶Žš—ñ‚ªNULL‚Å‚·B‘€ì‚ðŒë‚Á‚Ä‚¢‚Ü‚·");
+		printf("“n‚³‚ê‚½•¶Žš—ñ‚ªNULL‚Å‚·B");
 		return -1;
 	}
 	return 1;
